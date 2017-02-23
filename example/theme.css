@@ -1,0 +1,41 @@
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body * {
+    box-sizing: inherit;
+}
+
+main {
+    height: 100vh;
+    padding: 0.5em;
+}
+
+#container {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: auto;
+    border:1px solid darkgray;
+}
+
+li {
+    padding: 0.5em;
+    /*animation: 0.5s enter;*/
+}
+
+@keyframes enter {
+    from {
+        background: cadetblue;
+    }
+    to {
+        background: white;
+    }
+}

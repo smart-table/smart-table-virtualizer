@@ -1,0 +1,39 @@
+{
+  "name": "smart-table-virtualizer",
+  "version": "1.0.0",
+  "description": "virtualize items for smart-table collections",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run build:test && node ./test/dist/index.js",
+    "build:test": "rollup -c ./test/rollup.conf.js",
+    "build:example": "rollup -c ./example/rollup.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smart-table/smart-table-virtualizer.git"
+  },
+  "keywords": [
+    "smart-table",
+    "virtualize",
+    "list",
+    "arrays",
+    "array",
+    "performance",
+    "datatable",
+    "infinite",
+    "scroll"
+  ],
+  "author": "Laurent Renard",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smart-table/smart-table-virtualizer/issues"
+  },
+  "homepage": "https://github.com/smart-table/smart-table-virtualizer#readme",
+  "devDependencies": {
+    "rollup": "^0.41.4",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "smart-table-events": "^1.0.0",
+    "smart-table-operators": "^2.0.0",
+    "zora": "^0.3.0"
+  }
+}
