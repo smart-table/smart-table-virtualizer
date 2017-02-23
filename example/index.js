@@ -10,7 +10,6 @@ function rowFactory (item) {
       return li;
     },
     clean(){
-      console.log('cleaned ' + index);
     }
   }
 }
@@ -32,10 +31,10 @@ virtualizer({
   table: t,
   rowFactory,
   container,
-  bufferSize: 1000,
-  windowSize: 200,
-  indexKey: 'index',
-  treshold: 0.8
+  // bufferSize: 800,
+  // windowSize: 150,
+  // indexKey: 'index',
+  // treshold: 0.8
 });
 
 t.exec();

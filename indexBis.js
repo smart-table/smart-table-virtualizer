@@ -2,20 +2,34 @@ import dataSource from './lib/dataSource';
 import slidingWindow from './lib/slidingWindow';
 import containerFactory from './lib/container';
 
-export default function ({container, table, rowFactory, indexKey, windowSize = 200, bufferSize = 1000, treshold = 0.7}) {
+export default function ({container, table, rowFactory, indexKey = '$$index', windowSize = 200, bufferSize = 1000, treshold = 0.8}) {
   let sourceStream = null;
   let sw = null;
   let lastScroll;
   let anteLastScroll;
+  let fetching = false;
+
+  const bufferRefresh = 0.5;
+  const bufferRefreshSize = bufferRefresh * bufferSize / 2;
+
   const containerInterface = containerFactory({element: container, windowSize});
 
   const scrollDown = (scrollRatio) => {
     if (scrollRatio > treshold) {
       const toAppend = Math.floor(windowSize * (1 - scrollRatio));
-      console.log('after' + toAppend);
       const {shift, slice:nodes} = sw.slide(toAppend);
       if (shift !== 0) {
         containerInterface.append(...nodes.slice(-shift).map(n => n.dom()));
+      }
+      const position = sw.position();
+      if (position > bufferRefresh && fetching === false) {
+        const tailIndex = sw.tail()[indexKey];
+        fetching = true;
+        sourceStream.pull(tailIndex + 1, bufferRefreshSize)
+          .then(items => {
+            sw.push(...items.map(rowFactory));
+            fetching = false;
+          });
       }
     }
   };
@@ -23,10 +37,22 @@ export default function ({container, table, rowFactory, indexKey, windowSize = 2
   const scrollUp = (scrollRatio) => {
     if (scrollRatio < (1 - treshold)) {
       const toPrepend = Math.floor(windowSize * (1 - treshold));
-      console.log('pre' + toPrepend);
       const {shift, slice:nodes} = sw.slide(-toPrepend);
       if (shift !== 0) {
         containerInterface.prepend(...nodes.slice(0, -shift).reverse().map(n => n.dom()));
+      }
+      const position = sw.position();
+      if (position < bufferRefresh && fetching === false) {
+        const headIndex = sw.head()[indexKey];
+        const startIndex = Math.max(0, headIndex - bufferRefreshSize);
+        if (startIndex !== headIndex) {
+          fetching = true;
+          sourceStream.pull(startIndex, bufferRefreshSize)
+            .then(items => {
+              sw.unshift(...items.map((item) => Object.assign(item, rowFactory(item))));
+              fetching = false;
+            });
+        }
       }
     }
   };
