@@ -1,12 +1,14 @@
 {
   "name": "smart-table-virtualizer",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "virtualize items for smart-table collections",
   "main": "index.js",
+  "jsnext:main": "index.js",
   "scripts": {
     "test": "npm run build:test && node ./test/dist/index.js",
     "build:test": "rollup -c ./test/rollup.conf.js",
-    "build:example": "rollup -c ./example/rollup.conf.js"
+    "build:example": "rollup -c ./example/rollup.conf.js",
+    "build": "rollup -c ./rollup.conf.js"
   },
   "repository": {
     "type": "git",

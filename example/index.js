@@ -1,10 +1,10 @@
 import table from 'smart-table-core';
-import virtualizer from '../indexBis';
+import virtualizer from '../index';
 
 function rowFactory (item) {
   const {index, value} = item;
-  const li = document.createElement('LI');
-  li.innerHTML = `id: ${value.id}; index ${index}`;
+  const li = document.createElement('TR');
+  li.innerHTML = `<td>${value.id}</td><td>${index}</td>`;
   return {
     dom(){
       return li;
@@ -25,16 +25,15 @@ const t = table({
   tableState: {sort: {}, filter: {}, slice: {page: 1, size: 50}}
 });
 
-const container = document.getElementById('container');
+const container = document.querySelector('tbody');
 
 virtualizer({
   table: t,
   rowFactory,
   container,
-  // bufferSize: 800,
-  // windowSize: 150,
-  // indexKey: 'index',
-  // treshold: 0.8
+  // bufferSize: 1000,
+  // windowSize: 200,
+  treshold: 0.7
 });
 
 t.exec();

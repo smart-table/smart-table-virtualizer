@@ -1,13 +1,13 @@
 import dataSource from './lib/dataSource';
-import slidingWindow from './lib/slidingWindow';
+import bufferedWindow from './lib/bufferedWindow';
 import containerFactory from './lib/container';
 
-export default function ({container, table, rowFactory, indexKey = '$$index', windowSize = 200, bufferSize = 1000, treshold = 0.8}) {
+export default function ({container, table, rowFactory, windowSize = 200, bufferSize = 1000, treshold = 0.8}) {
   let sourceStream = null;
-  let sw = null;
+  let buffer = null;
+  let fetching = false;
   let lastScroll;
   let anteLastScroll;
-  let fetching = false;
 
   const bufferRefresh = 0.5;
   const bufferRefreshSize = bufferRefresh * bufferSize / 2;
@@ -17,17 +17,17 @@ export default function ({container, table, rowFactory, indexKey = '$$index', wi
   const scrollDown = (scrollRatio) => {
     if (scrollRatio > treshold) {
       const toAppend = Math.floor(windowSize * (1 - scrollRatio));
-      const {shift, slice:nodes} = sw.slide(toAppend);
+      const {shift, slice:nodes} = buffer.slide(toAppend);
       if (shift !== 0) {
         containerInterface.append(...nodes.slice(-shift).map(n => n.dom()));
       }
-      const position = sw.position();
+      const position = buffer.position();
       if (position > bufferRefresh && fetching === false) {
-        const tailIndex = sw.tail()[indexKey];
+        const tailIndex = buffer.tail().$$index;
         fetching = true;
         sourceStream.pull(tailIndex + 1, bufferRefreshSize)
           .then(items => {
-            sw.push(...items.map(rowFactory));
+            buffer.push(...items.map(rowFactory));
             fetching = false;
           });
       }
@@ -37,26 +37,28 @@ export default function ({container, table, rowFactory, indexKey = '$$index', wi
   const scrollUp = (scrollRatio) => {
     if (scrollRatio < (1 - treshold)) {
       const toPrepend = Math.floor(windowSize * (1 - treshold));
-      const {shift, slice:nodes} = sw.slide(-toPrepend);
+      const {shift, slice:nodes} = buffer.slide(-toPrepend);
       if (shift !== 0) {
-        containerInterface.prepend(...nodes.slice(0, -shift).reverse().map(n => n.dom()));
+        containerInterface.prepend(...nodes.slice(0, -shift)
+          .reverse()
+          .map(n => n.dom())
+        );
       }
-      const position = sw.position();
+      const position = buffer.position();
       if (position < bufferRefresh && fetching === false) {
-        const headIndex = sw.head()[indexKey];
+        const headIndex = buffer.head().$$index;
         const startIndex = Math.max(0, headIndex - bufferRefreshSize);
         if (startIndex !== headIndex) {
           fetching = true;
           sourceStream.pull(startIndex, bufferRefreshSize)
             .then(items => {
-              sw.unshift(...items.map((item) => Object.assign(item, rowFactory(item))));
+              buffer.unshift(...items.map(rowFactory));
               fetching = false;
             });
         }
       }
     }
   };
-
 
   container.addEventListener('scroll', () => {
       const {scrollHeight, scrollTop, offsetHeight} = container;
@@ -84,19 +86,21 @@ export default function ({container, table, rowFactory, indexKey = '$$index', wi
     containerInterface.empty();
     sourceStream = dataSource({table});
 
-    sw = slidingWindow({bufferSize, windowSize, indexKey});
-    sw.push(...items.map(rowFactory));
+    //todo clean old buffer
 
-    const {slice:initialNodes} = sw.slide(0);
+    buffer = bufferedWindow({bufferSize, windowSize});
+    buffer.push(...items.map(rowFactory));
+
+    const {slice:initialNodes} = buffer.slide(0);
     containerInterface.append(...initialNodes.map(n => n.dom()));
 
     //start to fill the buffer
-    sourceStream.pull(sw.length, bufferSize - sw.length)
+    sourceStream.pull(buffer.length, bufferSize - buffer.length)
       .then(items => {
-        sw.push(...items.map(rowFactory));
+        buffer.push(...items.map(rowFactory));
         if (containerInterface.length < windowSize) {
           containerInterface.empty();
-          const {slice:nodes} = sw.slide(0);
+          const {slice:nodes} = buffer.slide(0);
           containerInterface.append(...nodes.map(n => n.dom()));
         }
       });

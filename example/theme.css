@@ -18,17 +18,56 @@ main {
     padding: 0.5em;
 }
 
-#container {
+/*#container {*/
+/*height: 100%;*/
+/*width: 100%;*/
+/*margin: 0;*/
+/*overflow: auto;*/
+/*border:1px solid darkgray;*/
+/*}*/
+
+/*li {*/
+/*padding: 0.5em;*/
+/*!*animation: 0.5s enter;*!*/
+/*}*/
+
+table {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    width: 100%;
-    margin: 0;
-    overflow: auto;
-    border:1px solid darkgray;
+    border-collapse: separate;
 }
 
-li {
+tbody {
+    flex-grow: 1;
+    display: inline-block;
+    overflow: scroll;
+}
+
+tbody tr {
+    border-bottom: 1px solid gray;
+}
+
+tr:nth-child(2n) {
+    background: #c1ebf9;
+}
+
+thead {
+    border-bottom: 2px solid gray;
+    box-shadow: -1px 4px 8px 0px #b9b9b9;
+}
+
+tr {
+    display: flex;
+}
+
+th, td {
+    flex-basis: 50%;
     padding: 0.5em;
-    /*animation: 0.5s enter;*/
+}
+
+td:not(:first-child) {
+    border-left: 1px solid gray;
 }
 
 @keyframes enter {
