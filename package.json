@@ -2,10 +2,10 @@
   "name": "smart-table-virtualizer",
   "version": "0.0.0",
   "description": "virtualize items for smart-table collections",
-  "main": "index.js",
+  "main": "dist/index.js",
   "jsnext:main": "index.js",
   "scripts": {
-    "test": "npm run build:test && node ./test/dist/index.js",
+    "test": "npm run build:test && cat ./test/dist/index.js | tape-run",
     "build:test": "rollup -c ./test/rollup.conf.js",
     "build:example": "rollup -c ./example/rollup.conf.js",
     "build": "rollup -c ./rollup.conf.js"
@@ -35,7 +35,10 @@
     "rollup": "^0.41.4",
     "rollup-plugin-node-resolve": "^2.0.0",
     "smart-table-events": "^1.0.0",
-    "smart-table-operators": "^2.0.0",
+    "tape-run": "^2.2.1",
     "zora": "^0.3.0"
+  },
+  "dependencies": {
+    "smart-table-operators": "^2.0.1"
   }
 }
