@@ -34,7 +34,7 @@
   "devDependencies": {
     "rollup": "^0.41.4",
     "rollup-plugin-node-resolve": "^2.0.0",
-    "smart-table-events": "^1.0.0",
+    "smart-table-core": "^1.2.0",
     "tape-run": "^2.2.1",
     "zora": "^0.3.0"
   },

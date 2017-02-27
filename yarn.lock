@@ -982,13 +982,48 @@ single-line-log@^1.1.2:
   dependencies:
     string-width "^1.0.1"
 
+smart-table-core@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/smart-table-core/-/smart-table-core-1.2.0.tgz#1bdee804435dbfbf052f0429b1cb66f0eda39bb3"
+  dependencies:
+    smart-table-events "^1.0.0"
+    smart-table-filter "^1.0.0"
+    smart-table-json-pointer "^1.0.1"
+    smart-table-operators "^2.0.0"
+    smart-table-search "^1.0.1"
+    smart-table-sort "^1.0.0"
+
 smart-table-events@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/smart-table-events/-/smart-table-events-1.0.0.tgz#c0621a3e61de604eee5bc8e26304611998a0c336"
 
-smart-table-operators@^2.0.1:
+smart-table-filter@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/smart-table-filter/-/smart-table-filter-1.0.0.tgz#85e3fcc356dd02fd4bd2e6321d538893e190ce6e"
+  dependencies:
+    smart-table-json-pointer "^1.0.1"
+    smart-table-operators "^2.0.0"
+
+smart-table-json-pointer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/smart-table-json-pointer/-/smart-table-json-pointer-1.0.1.tgz#8927850521a49f4b74c778c2e1686a23ec21f742"
+
+smart-table-operators@^2.0.0, smart-table-operators@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/smart-table-operators/-/smart-table-operators-2.0.1.tgz#73a30c464b10f449a8de4ef4e6806394ac7f7d86"
+
+smart-table-search@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/smart-table-search/-/smart-table-search-1.0.1.tgz#63775aea2c853deaeb5f0d9a7b4af1ad5bb4f0a8"
+  dependencies:
+    smart-table-json-pointer "^1.0.1"
+
+smart-table-sort@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/smart-table-sort/-/smart-table-sort-1.0.0.tgz#e5ed29210e536b8e757e17ffb29ca0536df53d27"
+  dependencies:
+    smart-table-json-pointer "^1.0.1"
+    smart-table-operators "^2.0.0"
 
 sntp@1.x.x:
   version "1.0.9"
