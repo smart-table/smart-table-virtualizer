@@ -1,23 +1,18 @@
 import table from 'smart-table-core';
 import virtualizer from '../index';
 
-function rowFactory (item) {
-  const {index, value} = item;
-  const li = document.createElement('TR');
-  li.innerHTML = `<td>${value.id}</td><td>${index}</td>`;
+
+function rowFactory ({value}) {
+  const {name:{first:firstName, last:lastName}, gender, birthDate, size} = value;
+  const tr = document.createElement('TR');
+  tr.innerHTML = `<td>${lastName}</td><td>${firstName}</td><td>${gender}</td><td>${birthDate.toLocaleDateString()}</td><td>${size}</td>`;
   return {
     dom(){
-      return li;
+      return tr;
     },
     clean(){
     }
   }
-}
-
-const data = [];
-
-for (let i = 1; i <= 10000; i++) {
-  data.push({id: i});
 }
 
 const t = table({
